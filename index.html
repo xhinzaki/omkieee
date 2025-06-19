@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>for jc ^.^</title>
+  
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      background-color: #fdf2f8;
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 20px;
+      background: #ff80ab;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+
+    .btn:hover {
+      background: #ff4081;
+    }
+
+    input {
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px solid #ff80ab;
+      outline: none;
+    }
+
+    #lyricsDisplay {
+      margin-top: 20px;
+      padding: 20px;
+      background: linear-gradient(135deg, #cceeff, #e6f7ff);
+      border-radius: 20px;
+      max-width: 400px;
+      font-size: 16px;
+      color: #3a3a3a;
+      line-height: 1.6;
+      white-space: pre-line;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Click to Start -->
+  <div id="startScreen">
+    <h2>Click to Start 💌</h2>
+    <button class="btn" onclick="showOops()">Start</button>
+  </div>
+
+  <!-- Oops Message -->
+  <div id="oopsScreen" class="hidden">
+    <p>oops! i forgot, you should enter the passcode first! ^.^</p>
+    <button class="btn" onclick="showPasscode()">Okay!</button>
+  </div>
+
+  <!-- Passcode Screen -->
+  <div id="passcodeScreen" class="hidden">
+    <h3>Enter the Passcode 🔐</h3>
+    <input type="password" id="codeInput" placeholder="Enter code...">
+    <br>
+    <button class="btn" onclick="checkCode()">Unlock</button>
+    <div id="wrongText" style="color: #e91e63; font-size: 14px; margin-top: 5px;"></div>
+  </div>
+
+  <!-- Lyrics & Music -->
+  <div id="vinylScreen" class="hidden">
+    <h2>Now Playing : "Blue" by Yung Kai</h2>
+    <audio id="blueSong">
+      <source src="bluekai.mp3" type="audio/mpeg">
+      Your browser does not support the audio tag.
+    </audio>
+    <div id="lyricsDisplay"></div>
+  </div>
+
+  <script>
+    function showOops() {
+      document.getElementById("startScreen").classList.add("hidden");
+      document.getElementById("oopsScreen").classList.remove("hidden");
+    }
+
+    function showPasscode() {
+      document.getElementById("oopsScreen").classList.add("hidden");
+      document.getElementById("passcodeScreen").classList.remove("hidden");
+    }
+
+    function checkCode() {
+      const input = document.getElementById('codeInput').value;
+      const wrongText = document.getElementById('wrongText');
+      const correctCode = "072024";
+
+      if (input === correctCode) {
+        document.getElementById('passcodeScreen').classList.add('hidden');
+        document.getElementById('vinylScreen').classList.remove('hidden');
+
+        const song = document.getElementById("blueSong");
+        song.play();
+        playTypewriterLyrics();
+      } else {
+        wrongText.innerText = "Wrong code... try again 😿";
+      }
+    }
+
+    const lyricsLines = [
+      { time: 1000, text: "Know you're all that I want this life" },
+      { time: 7000, text: "I'll imagine we fell in love" },
+      { time: 11000, text: "I'll nap under moonlight skies with you" },
+      { time: 14000, text: "I think I'll picture us, you with the waves" },
+      { time: 18000, text: "The ocean’s colors on your face" },
+      { time: 22000, text: "I'll leave my heart with your air" },
+      { time: 26000, text: "So let me fly with you" },
+      { time: 30000, text: "Will you be forever with me?" }
+    ];
+
+
+    function typeLine(line, callback) {
+      let i = 0;
+      const display = document.getElementById("lyricsDisplay");
+      const interval = setInterval(() => {
+        display.innerHTML += line.charAt(i);
+        i++;
+        if (i >= line.length) {
+          clearInterval(interval);
+          display.innerHTML += "\n";
+          if (callback) setTimeout(callback, 200);
+        }
+      }, 50);
+    }
+
+    function playTypewriterLyrics() {
+      const display = document.getElementById("lyricsDisplay");
+      display.innerHTML = "";
+      lyricsLines.forEach((line, index) => {
+        setTimeout(() => {
+          typeLine(line.text);
+        }, line.time);
+      });
+    }
+  </script>
+
+</body>
+</html>
